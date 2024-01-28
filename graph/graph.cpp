@@ -17,8 +17,9 @@ namespace graph {
 		std::priority_queue<dijkstra_wrapper*, std::vector<dijkstra_wrapper*>, compare_wrappers> PQ;
 		
 		auto Relax = [cost_func](dijkstra_wrapper* u, dijkstra_wrapper* v) {
-			if (u->dist + cost_func(u, v) < v->dist) {
-				v->dist = u->dist + cost_func(u, v);
+			auto cost = cost_func(u, v);
+			if (u->dist + cost < v->dist) {
+				v->dist = u->dist + cost;
 				v->prev = u;
 			}
 		}
