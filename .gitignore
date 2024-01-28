@@ -34,3 +34,11 @@
 # Java IntelliJ crap
 .idea
 *.iml
+
+# Visual studio crap
+.vs
+*.sln
+*json
+*.vcxproj
+*.vcxproj.*
+x64
