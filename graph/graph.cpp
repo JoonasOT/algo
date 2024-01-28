@@ -3,12 +3,11 @@
 #include "graph.h"
 
 namespace graph {
-	template<class T, struct costF, struct relax>
-	std::unordered_map<T, dijkstra_wrapper> dijkstra(const std::vector<T>& vertecies,
+	template<class T, class costF>
+	std::unordered_map<T, dijkstra_wrapper<T>> dijkstra(const std::vector<T>& vertecies,
 										   const size_t& start_i,
-										   int (*get_adj)(const T& u),
-										   costF& cost_func,
-										   relax& relax_func) {
+										   std::vector<T*>(*get_adj)(const T& u),
+										   costF& cost_func) {
 		
 		std::unordered_map<T, dijkstra_wrapper> graph;
 
@@ -17,17 +16,24 @@ namespace graph {
 
 		std::priority_queue<dijkstra_wrapper*, std::vector<dijkstra_wrapper*>, compare_wrappers> PQ;
 		
+		auto Relax = [cost_func](dijkstra_wrapper* u, dijkstra_wrapper* v) {
+			if (u->dist + cost_func(u, v) < v->dist) {
+				v->dist = u->dist + cost_func(u, v);
+				v->prev = u;
+			}
+		}
+
 		graph.at(start_i).dist = 0;
 		graph.at(start_i).c = GRAY;
 		PQ.push(&(graph.at(start_i)));
 
 		while (!PQ.empty()) {
 			dijkstra_wrapper* u = PQ.top(); PQ.pop();
-			if (u->c == BLACK) continue;
+			if (u->c == BLACK) continue ;
 
-			for (const auto& adj_p : get_adj(*u->data) {
-				dijkstra_wrapper* v = &graph[adj_p];
-				relax_func(u, v);
+			for (const auto& adj_p : get_adj(*u->data)) {
+				dijkstra_wrapper* v = &graph[*adj_p];
+				Relax(u, v);
 				if (v->c == WHITE) {
 					v->c = GRAY;
 					PQ.push(v);
