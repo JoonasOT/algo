@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+# Visual studio crap
+.vs
+*.sln
+*json
+*.vcxproj
+*.vcxproj.*
+x64
