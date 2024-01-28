@@ -10,7 +10,11 @@ namespace graph {
 		long int dist = -1;
 		dijkstra_wrapper* prev = nullptr;
 	};
-
-	template<class T, struct costF>
-	std::vector<dijkstra_wrapper> dijkstra(const std::vector<T>& vertecies, const size_t& start_i, costF& cost_func);
+	struct compare_wrappers {
+		bool operator()(const dijkstra_wrapper* l, const dijkstra_wrapper* r) const {
+			return l->dist > r->dist;	// > for a min PQ
+		}
+	};
+	template<class T, struct costF, struct relax>
+	std::unordered_map<T, dijkstra_wrapper> dijkstra(const std::vector<T>& vertecies, const size_t& start_i, int (*get_adj)(const T& u), costF& cost_func, relax& relax_func);
 }
