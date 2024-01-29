@@ -34,6 +34,7 @@
 # Java IntelliJ crap
 .idea
 *.iml
+out
 
 # Visual studio crap
 .vs
